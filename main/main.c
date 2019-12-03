@@ -6,16 +6,13 @@
 GLuint VAO[2], VBO[2], shader_program;
 
 
-void framebuffer_size_callback(GLFWwindow* window, int w, int h){
+void framebuffer_size_callback(GLFWwindow* window, int w, int h)
+{
 	glViewport(0, 0, w, h);
 }
 
-void processInput(GLFWwindow *window){
-	if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-		glfwSetWindowShouldClose(window, 1);
-}
-
-void set_data(void){
+void set_data(void)
+{
 	glGenVertexArrays(2, VAO);
 
 
@@ -91,7 +88,8 @@ void set_data(void){
 
 }
 
-int main(void){
+int main(void)
+{
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -110,7 +108,8 @@ int main(void){
 	float x_velocity[] = {-.003, 0}, aux_x_velocity[2];
 	unsigned short col_count = 0;
 	while(!glfwWindowShouldClose(window)){
-		processInput(window);
+		if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+			glfwSetWindowShouldClose(window, 1);
 
 		aux_x_velocity[0] = x_velocity[0]; aux_x_velocity[1] = x_velocity[1];
 		if (first_square[10] <= second_square[0]){ // First square collision with second square
