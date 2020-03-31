@@ -2,6 +2,7 @@
 #include <GLFW/glfw3.h>
 
 #include "data.h"
+#include "file_ops.h"
 
 GLuint VAO[2], VBO[2], shader_program;
 
@@ -26,7 +27,8 @@ void set_data(void)
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5*sizeof(float), 0);
 	glEnableVertexAttribArray(0);
 	//color
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5*sizeof(float), (void*)(2*sizeof(float)));
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5*sizeof(float),
+			(void*)(2*sizeof(float)));
 	glEnableVertexAttribArray(1);
 
 
@@ -48,32 +50,17 @@ void set_data(void)
 	glBindBuffer(GL_ARRAY_BUFFER, VBO[0]);
 
 
-	const char * const vertexShaderSource =
-		"#version 330 core\n"
-		"layout (location = 0) in vec2 aPos;\n"
-		"layout (location = 1) in vec3 aColor;\n"
-		"out vec3 ourColor;\n"
-		"void main(){\n"
-		"	gl_Position = vec4(aPos.xy, 0, 1);\n"
-		"	ourColor = aColor;\n"
-		"}\0";
-
-	const char * const fragmentShaderSource =
-		"#version 330 core\n"
-		"out vec4 FragColor;\n"
-		"in vec3 ourColor;\n"
-		"void main(){\n"
-		"	FragColor = vec4(ourColor, 1);\n"
-		"}\0";
+	const char *vertex_shader_source = file_to_str("shaders/vertex.glsl");
+	const char *fragment_shader_source = file_to_str("shaders/fragment.glsl");
 
 	GLuint vertexShader, fragmentShader;
 
 	vertexShader = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
+	glShaderSource(vertexShader, 1, &vertex_shader_source, NULL);
 	glCompileShader(vertexShader);
 
 	fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
+	glShaderSource(fragmentShader, 1, &fragment_shader_source, NULL);
 	glCompileShader(fragmentShader);
 
 	shader_program = glCreateProgram();
@@ -95,7 +82,7 @@ int main(void)
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-	GLFWwindow* window = glfwCreateWindow(800, 600, "pi-collision-calculator", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(800,800, "pi-collision-calculator", 0,0);
 	glfwMakeContextCurrent(window);
 
 	gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);

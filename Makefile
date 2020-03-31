@@ -1,5 +1,7 @@
 CC=c99
+files=src/main.c src/file_ops.c
 
-build: src/main.c
-	$(CC) -O3 -o pi-collision-calculator src/main.c glad.c -Wall -Iinclude -lGL -lglfw -ldl
+build: $(files)
+	$(CC) -O2 -o pi-collision-calculator $(files) glad.c \
+		-Wall -Iinclude -lGL -lglfw -ldl
 
