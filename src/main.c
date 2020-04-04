@@ -95,44 +95,43 @@ int main(void)
 	set_data();
 
 
-	float velocity[] = {-.003, 0}, aux_velocity[2];
+	float velocity[] = {0, -.003}, aux_velocity[2],
+		offset[] = {-.3, .5};
 	unsigned short col_count = 0;
 	char title[31];
+
+	int offset_location = glGetUniformLocation(shader_program, "offset");
 
 	while(!glfwWindowShouldClose(window)) {
 		if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 			glfwSetWindowShouldClose(window, 1);
 
-		sprintf(title, "pi-collision-calculator: %d", col_count);
+		sprintf(title, "pi-collision-calculator: %u", col_count);
 		glfwSetWindowTitle(window, title);
 
-		aux_velocity[0] = velocity[0]; aux_velocity[1] = velocity[1];
-
-		if (first_square[10] <= second_square[0]) {
+		if (offset[0]+.2 >= offset[1]) {
 			// First square collision with second square
-			// index 10 of first_square is its left point
-			// index 0 of second_square is its right point
+			aux_velocity[0] = velocity[0]; aux_velocity[1] = velocity[1];
+
 			velocity[0] =
-				(mass_difference-1)/(mass_difference+1)*
-				aux_velocity[0]+(2/(mass_difference+1))*
-				aux_velocity[1];
-			velocity[1] =
 				(1-mass_difference)/(mass_difference+1)*
-				aux_velocity[1]+((2*mass_difference)/
-				(mass_difference+1))*aux_velocity[0];
+				aux_velocity[0]+((2*mass_difference)/
+				(mass_difference+1))*aux_velocity[1];
 
+			velocity[1] =
+				(mass_difference-1)/(mass_difference+1)*
+				aux_velocity[1]+(2/(mass_difference+1))*
+				aux_velocity[0];
 			++col_count;
-		} else if (second_square[10] <= -.9) {
+		} else if (offset[0] <= -.8) {
 			// Second square collision with wall
-			velocity[1] = -(velocity[1]);
+			velocity[0] = -(velocity[0]);
 			++col_count;
 		}
 
+		offset[0] += velocity[0];
+		offset[1] += velocity[1];
 
-		for (unsigned char i = 0; i < 20; i+=5){
-			first_square[i] += velocity[0];
-			second_square[i] += velocity[1];
-		}
 
 		glClearColor(.2, .3, .3, 1);
 		glClear(GL_COLOR_BUFFER_BIT);
@@ -141,13 +140,16 @@ int main(void)
 
 		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(first_square),
 				first_square);
+		glUniform1f(offset_location, offset[0]);
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
 		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(second_square),
 				second_square);
+		glUniform1f(offset_location, offset[1]);
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
 		glBindVertexArray(VAO[1]);
+		glUniform1f(offset_location, 0);
 		glDrawArrays(GL_TRIANGLE_FAN, 0, 6);
 
 
