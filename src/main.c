@@ -5,7 +5,7 @@
 #include "data.h"
 #include "file_ops.h"
 
-GLuint VAO[2], VBO[2], shader_program;
+unsigned int VAO[3], VBO[3], shader_program;
 
 
 void framebuffer_size_callback(GLFWwindow* window, int w, int h)
@@ -15,14 +15,14 @@ void framebuffer_size_callback(GLFWwindow* window, int w, int h)
 
 void set_data(void)
 {
-	glGenVertexArrays(2, VAO);
-
+	glGenVertexArrays(3, VAO);
+	glGenBuffers(3, VBO);
 
 	glBindVertexArray(VAO[0]);
-	glGenBuffers(1, VBO);
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO[0]);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(first_square), 0, GL_DYNAMIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(first_square), first_square,
+			GL_STATIC_DRAW);
 
 	//position
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5*sizeof(float), 0);
@@ -34,10 +34,10 @@ void set_data(void)
 
 
 	glBindVertexArray(VAO[1]);
-	glGenBuffers(1, &VBO[1]);
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO[1]);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(wall_floor), wall_floor, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(second_square), second_square,
+			GL_STATIC_DRAW);
 
 	//position
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5*sizeof(float), 0);
@@ -48,14 +48,25 @@ void set_data(void)
 	glEnableVertexAttribArray(1);
 
 
-	glBindVertexArray(VAO[0]);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO[0]);
+	glBindVertexArray(VAO[2]);
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO[2]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(wall_floor), wall_floor,
+			GL_STATIC_DRAW);
+
+	//position
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5*sizeof(float), 0);
+	glEnableVertexAttribArray(0);
+	//color
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5*sizeof(float),
+			(void*)(2*sizeof(float)));
+	glEnableVertexAttribArray(1);
 
 
 	const char *vertex_shader_source = file_to_str("shaders/vertex.glsl");
 	const char *fragment_shader_source = file_to_str("shaders/fragment.glsl");
 
-	GLuint vertex_shader, fragment_shader;
+	unsigned int vertex_shader, fragment_shader;
 
 	vertex_shader = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(vertex_shader, 1, &vertex_shader_source, NULL);
@@ -132,23 +143,26 @@ int main(void)
 		offset[0] += velocity[0];
 		offset[1] += velocity[1];
 
-
 		glClearColor(.2, .3, .3, 1);
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		glBindVertexArray(VAO[0]);
+		glBindBuffer(GL_ARRAY_BUFFER, VBO[0]);
 
-		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(first_square),
-				first_square);
 		glUniform1f(offset_location, offset[0]);
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
-		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(second_square),
-				second_square);
+
+		glBindVertexArray(VAO[1]);
+		glBindBuffer(GL_ARRAY_BUFFER, VBO[1]);
+
 		glUniform1f(offset_location, offset[1]);
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
-		glBindVertexArray(VAO[1]);
+
+		glBindVertexArray(VAO[2]);
+		glBindBuffer(GL_ARRAY_BUFFER, VBO[2]);
+
 		glUniform1f(offset_location, 0);
 		glDrawArrays(GL_TRIANGLE_FAN, 0, 6);
 
