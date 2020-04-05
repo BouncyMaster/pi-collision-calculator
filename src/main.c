@@ -147,21 +147,18 @@ int main(void)
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		glBindVertexArray(VAO[0]);
-		glBindBuffer(GL_ARRAY_BUFFER, VBO[0]);
 
 		glUniform1f(offset_location, offset[0]);
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
 
 		glBindVertexArray(VAO[1]);
-		glBindBuffer(GL_ARRAY_BUFFER, VBO[1]);
 
 		glUniform1f(offset_location, offset[1]);
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
 
 		glBindVertexArray(VAO[2]);
-		glBindBuffer(GL_ARRAY_BUFFER, VBO[2]);
 
 		glUniform1f(offset_location, 0);
 		glDrawArrays(GL_TRIANGLE_FAN, 0, 6);
