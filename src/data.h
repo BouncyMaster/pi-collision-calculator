@@ -16,7 +16,7 @@ const float second_square[] = {
 	-.1, -.9,  0, 1, 0
 }; 
 
-const float wall_floor[30] = {
+const float wall_floor[] = {
 	 -1,  -1,  .1, .1, .1,
 	  1,  -1,  .1, .1, .1,
 	  1, -.9,  .1, .1, .1,
