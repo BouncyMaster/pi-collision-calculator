@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
@@ -8,12 +9,14 @@
 unsigned int VAO[3], VBO[3], shader_program;
 
 
-void framebuffer_size_callback(GLFWwindow* window, int w, int h)
+void
+framebuffer_size_callback(GLFWwindow* window, int w, int h)
 {
 	glViewport(0, 0, w, h);
 }
 
-void set_data(void)
+void
+set_data(void)
 {
 	glGenVertexArrays(3, VAO);
 	glGenBuffers(3, VBO);
@@ -88,8 +91,20 @@ void set_data(void)
 }
 
 
-int main(void)
+int
+main(int argc, char **argv)
 {
+	if (argc < 2) {
+		puts("ERROR: Specify mass difference");
+		return 1;
+	}
+
+	float mass_difference = (float)atoi(argv[1]);
+	if (!mass_difference) {
+		puts("ERROR: Invalid mass difference");
+		return 1;
+	}
+
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -109,11 +124,11 @@ int main(void)
 	float velocity[] = {0, -.003}, aux_velocity[2],
 		offset[] = {-.3, .5};
 	unsigned short col_count = 0;
-	char title[31];
+	char title[32];
 
 	int offset_location = glGetUniformLocation(shader_program, "offset");
 
-	while(!glfwWindowShouldClose(window)) {
+	while (!glfwWindowShouldClose(window)) {
 		if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 			glfwSetWindowShouldClose(window, 1);
 
@@ -171,7 +186,6 @@ int main(void)
 	glDeleteVertexArrays(3, VAO);
 	glDeleteBuffers(3, VBO);
 	glDeleteProgram(shader_program);
-
 
 	glfwTerminate();
 }

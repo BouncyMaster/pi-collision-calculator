@@ -1,8 +1,6 @@
 #ifndef DATA_H
 #define DATA_H
 
-const float mass_difference = 100;
-
 const float first_square[] = {
 	 .1, -.7,  1, 0, 0,
 	 .1, -.9,  1, 0, 0,
