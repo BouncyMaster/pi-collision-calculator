@@ -1,5 +1,5 @@
 LIBS = -lGL -lglfw -ldl -lm
-INCS = -Iexternal/glad/include -Iexternal/stb
+INCS = -Iexternal/glad/include
 CFLAGS = -std=c99 -O2 -march=znver1 -Wall
 
 SRC = src/main.c src/file_ops.c external/glad/src/glad.c
@@ -11,4 +11,4 @@ gentags:
 	ctags `find src -name "*.c"`
 
 clean:
-	rm -f rotate camera tags
+	rm -f pi-collision-calculator tags
