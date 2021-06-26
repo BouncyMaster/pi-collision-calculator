@@ -1,6 +1,14 @@
-CC=c99
-files=src/main.c src/file_ops.c
+LIBS = -lGL -lglfw -ldl -lm
+INCS = -Iexternal/glad/include -Iexternal/stb
+CFLAGS = -std=c99 -O2 -march=znver1 -Wall
 
-build: $(files)
-	$(CC) -O2 -o pi-collision-calculator $(files) glad.c \
-		-Wall -Iinclude -lGL -lglfw -ldl
+SRC = src/main.c src/file_ops.c external/glad/src/glad.c
+
+pi-collision-calculator: $(SRC)
+	$(CC) -o $@ $^ $(INCS) $(LIBS) $(CFLAGS)
+
+gentags:
+	ctags `find src -name "*.c"`
+
+clean:
+	rm -f rotate camera tags
