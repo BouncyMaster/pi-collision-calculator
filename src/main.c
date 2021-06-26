@@ -161,6 +161,9 @@ main(int argc, char **argv)
 		glClearColor(.2, .3, .3, 1);
 		glClear(GL_COLOR_BUFFER_BIT);
 
+		if (offset[1] <= -.6) // fast collisions
+			continue; // skip drawing and waiting
+
 		glBindVertexArray(VAO[0]);
 
 		glUniform1f(offset_location, offset[0]);
