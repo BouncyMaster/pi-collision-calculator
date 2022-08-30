@@ -2,9 +2,9 @@
 #include <stdlib.h>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <file_ops.h>
 
 #include "data.h"
-#include "file_ops.h"
 
 unsigned int VAO[3], VBO[3], shader_program;
 
@@ -66,8 +66,8 @@ set_data(void)
 	glEnableVertexAttribArray(1);
 
 
-	const char *vertex_shader_source = file_to_str("shaders/vertex.glsl");
-	const char *fragment_shader_source = file_to_str("shaders/fragment.glsl");
+	const char *vertex_shader_source = file_to_str("shaders/vertex.glsl"),
+		*fragment_shader_source = file_to_str("shaders/fragment.glsl");
 
 	unsigned int vertex_shader, fragment_shader;
 
@@ -78,6 +78,9 @@ set_data(void)
 	fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
 	glShaderSource(fragment_shader, 1, &fragment_shader_source, NULL);
 	glCompileShader(fragment_shader);
+
+	file_to_str_free(vertex_shader_source);
+	file_to_str_free(fragment_shader_source);
 
 	shader_program = glCreateProgram();
 	glAttachShader(shader_program, vertex_shader);
