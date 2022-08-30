@@ -1,5 +1,5 @@
-LDFLAGS = -L/usr/X11R6/lib -L/usr/local/lib
-LIBS = -lGL -lglfw -lm
+LDFLAGS = -L/usr/local/lib
+LIBS = -lglfw
 INCS = -Iexternal/file_ops -Iexternal/glad/include -I /usr/local/include
 CFLAGS = -std=c99 -O2 -march=native -Wall
 
