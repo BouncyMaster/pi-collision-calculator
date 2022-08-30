@@ -1,6 +1,6 @@
 LDFLAGS = -L/usr/local/lib
 LIBS = -lglfw
-INCS = -Iexternal/file_ops -Iexternal/glad/include -I /usr/local/include
+INCS = -Iexternal/file_ops -Iexternal/glad/include -I/usr/local/include
 CFLAGS = -std=c99 -O2 -march=native -Wall
 
 SRC = src/main.c external/file_ops/file_ops.c external/glad/src/glad.c
